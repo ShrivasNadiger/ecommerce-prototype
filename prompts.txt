@@ -1,0 +1,102 @@
+Create a new fullstack e-commerce prototype using React (Vite) frontend + Express backend + MongoDB. Basic features: product listing, product detail, cart, responsive UI.
+
+Create backend folder “server” with Express server, mongoose connection setup, health route, and basic folder structure.
+
+Add Product model + Mongoose schema with fields (title, price, description, category, image, rating).
+
+Add product controller & routes: GET /api/products & GET /api/products/:id returning JSON.
+
+Add seeding script that inserts 10 sample products automatically into MongoDB. Use picsum.photos for images.
+
+Create frontend folder “client” with Vite + React + TailwindCSS + React Router.
+
+Create Home page with product grid layout fetching products from backend.
+
+Create Product Detail page showing selected product + Add to Cart button.
+
+Create Zustand store for cart with addItem, removeItem, inc, dec, subtotal, and persist cart via localStorage.
+
+Create Navbar with brand name + navigation links + cart badge showing item count.
+
+Create Skeleton / Loader UI and display while products are loading.
+
+Make site responsive: improve Home grid and ProductDetail UI for mobile breakpoints using Tailwind.
+
+Enable navigation in React using React Router routes: /, /product/:id, /cart, and NotFound page.
+
+Add Axios helper file using baseURL from .env (VITE_API_URL) and use that for API calls.
+
+Add Login & Register pages and connect to POST /api/auth/register /login APIs.
+
+Add Zustand Auth store: handle hydrate(), login(), register(), logout(), and axios withCredentials.
+
+Add JWT based authentication to backend using HttpOnly cookie + /api/auth/me to return user data.
+
+Modify Navbar: if user logged in → show “Hi {name}” + Logout, else show Login/Register links.
+
+Update README.md: project setup steps, environment variable setup, seed instructions, run commands.
+
+promts given to explain the structure/scaffold  and connect:
+1.Goal: Create a full-stack e-commerce prototype in a monorepo.
+
+Tech:
+- Frontend: React 18 + Vite, React Router v6, Zustand (cart), TailwindCSS.
+- Backend: Node.js + Express, MongoDB via Mongoose, CORS, dotenv, morgan.
+- DB: MongoDB (dev can be local or Atlas via .env).
+- Ports: client 5173, server 5000.
+
+Structure:
+ecommerce-prototype/
+  client/
+  server/
+  package.json (root scripts with concurrently)
+  README.md
+
+Backend:
+- Routes:
+  GET /api/health -> {status:"ok"}
+  GET /api/products -> list
+  GET /api/products/:id -> detail
+- Product model: { title, description, image, price, rating, category }
+- Seed script: insert 10-12 products (picsum.photos images)
+- Middlewares: morgan, express.json(), cors({origin:"http://localhost:5173",credentials:true})
+
+Frontend:
+- Pages: Home (grid), ProductDetail, Cart, NotFound
+- Components: Navbar, ProductCard, Loader, QuantitySelector, Footer
+- Zustand cart: items [{product, qty}], actions add/remove/inc/dec/clear, selectors count/subtotal, localStorage persist
+- API helper with axios using VITE_API_URL
+- UI responsive, clean
+
+Acceptance:
+- npm run install-all
+- npm run dev (concurrently runs client and server)
+- /api/products returns >=10 items
+- Home shows grid, cart badge updates, refresh persists
+
+2.promt given to setup authentication :
+Goal: Add email/password authentication with JWT in HttpOnly cookie for better UX.
+
+Backend:
+- New User model: { name, email(unique, lowercase), passwordHash }
+- New routes (mounted /api/auth):
+  POST /register {name,email,password} -> set HttpOnly 'token' cookie, return user{id,name,email}
+  POST /login {email,password} -> set cookie, return user
+  GET /me -> requires auth, return {user}
+  POST /logout -> clear cookie
+- requireAuth middleware (verifies JWT from cookie, set req.user)
+- .env additions: JWT_SECRET, JWT_EXPIRES=7d, COOKIE_SECURE=false
+- CORS: origin http://localhost:5173, credentials true
+- cookie-parser added
+
+Frontend:
+- axios instance with withCredentials: true
+- Zustand auth store: { user, loading, error, hydrate(), login(), register(), logout() }
+- Pages: Login.jsx, Register.jsx (react-hook-form)
+- Navbar: if user -> "Hi, {firstName}" + Logout; else Login/Register
+- Auto-hydrate on app load (calls /api/auth/me)
+
+Acceptance:
+- Register -> auto-login cookie set; refresh keeps user
+- Login/Logout works; /api/auth/me returns 401 when signed out
+
