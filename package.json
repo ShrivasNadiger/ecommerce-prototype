@@ -1,0 +1,23 @@
+{
+    "name": "ecommerce-prototype",
+    "version": "1.0.0",
+    "description": "Full-stack E-Commerce prototype with React and Node.js",
+    "private": true,
+    "scripts": {
+        "dev": "concurrently \"npm:dev:*\"",
+        "dev:client": "npm --prefix client run dev",
+        "dev:server": "npm --prefix server run dev",
+        "install-all": "npm --prefix client i && npm --prefix server i"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    },
+    "keywords": [
+        "ecommerce",
+        "react",
+        "express",
+        "mongodb"
+    ],
+    "author": "",
+    "license": "ISC"
+}
